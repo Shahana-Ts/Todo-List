@@ -1,33 +1,89 @@
 document.addEventListener("DOMContentLoaded", () => {
+  loadTasks();
+
   const form = document.getElementById("taskForm");
-  const input = document.getElementById("taskInput");
-  const list = document.getElementById("taskList");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const taskText = input.value.trim();
-    if (taskText === "") return;
 
-    const li = document.createElement("li");
-    li.className = "list-group-item d-flex justify-content-between align-items-center";
-    li.innerHTML = `
-      <span>${taskText}</span>
-      <div>
-        <button class="btn btn-success btn-sm me-2" onclick="completeTask(this)">✔</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteTask(this)">✖</button>
-      </div>
-    `;
-    list.appendChild(li);
-    input.value = "";
+    const formData = new FormData(form);
+
+    fetch("php/saveTask.php", {
+      method: "POST",
+      body: formData,
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        form.reset();
+        loadTasks();
+      } else {
+        alert(data.message || "Failed to add task.");
+      }
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
   });
 });
 
-function completeTask(button) {
-  const li = button.closest("li");
-  li.classList.toggle("completed");
+// Load tasks from the database
+function loadTasks() {
+  fetch("php/fetchtask.php")
+    .then((res) => res.json())
+    .then((tasks) => {
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      if (tasks.length === 0) {
+        list.innerHTML = `<li class="list-group-item text-muted">No tasks yet.</li>`;
+        return;
+      }
+
+      tasks.forEach((task) => {
+        const li = document.createElement("li");
+        li.className = "list-group-item d-flex justify-content-between align-items-center";
+        if (task.is_completed == 1) li.classList.add("completed");
+
+        li.innerHTML = `
+          <div>
+            <strong>${task.task_name}</strong><br>
+            <small>${task.description || ""}</small>
+          </div>
+          <div>
+            <button class="btn btn-success btn-sm me-2" onclick="completeTask(${task.id})">✔</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.id})">✖</button>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    });
 }
 
-function deleteTask(button) {
-  const li = button.closest("li");
-  li.remove();
+function completeTask(id) {
+  fetch("php/completetask.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `id=${id}`,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        loadTasks();
+      }
+    });
+}
+
+function deleteTask(id) {
+  fetch("php/deleteTask.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `id=${id}`,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        loadTasks();
+      }
+    });
 }

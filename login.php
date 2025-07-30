@@ -84,11 +84,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form method="POST" autocomplete="off">
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input name="email" type="email" class="form-control" placeholder="Email" required autofocus>
+        <input 
+          name="email" 
+          type="email" 
+          class="form-control" 
+          placeholder="Email" 
+          required 
+          autocomplete="off">
       </div>
       <div class="mb-3 position-relative">
         <label class="form-label">Password</label>
-        <input name="password" id="password" type="password" class="form-control" placeholder="Password" required>
+        <input 
+          name="password" 
+          id="password" 
+          type="password" 
+          class="form-control" 
+          placeholder="Password" 
+          required 
+          autocomplete="new-password">
         <span class="show-password" onclick="togglePassword()">
           <i class="fa-solid fa-eye" id="eyeIcon"></i>
         </span>
