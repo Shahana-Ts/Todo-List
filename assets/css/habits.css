@@ -1,0 +1,51 @@
+.habit-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.habit-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+.habit-form input {
+    flex-grow: 1;
+    padding: 0.5rem;
+}
+
+.habit-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin: 1rem 0;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: #f3f4f6;
+    cursor: pointer;
+}
+
+.calendar-day.completed {
+    background: #10b981;
+    color: white;
+}
+
+.habit-streak {
+    font-weight: bold;
+    color: #4f46e5;
+}

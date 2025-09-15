@@ -18,7 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user = $result->fetch_assoc()) {
         if (password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
+            // ✅ set all session data before redirect
+            $_SESSION['user_id']    = $user['id'];
+            $_SESSION['username']   = $user['username'];
+            $_SESSION['is_premium'] = $user['is_premium']; // this is critical
+
             header("Location: home.php");
             exit();
         } else {
@@ -27,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $error = "No user found with that email.";
     }
+
     $stmt->close();
 }
 ?>

@@ -1,0 +1,2 @@
+Tried to delete habit 7 for user 3
+Tried to delete habit 11 for user 10
